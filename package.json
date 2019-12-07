@@ -1,0 +1,22 @@
+{
+  "name": "aio-remote-ssh",
+  "version": "1.0.0",
+  "description": "Remote SSH terminal, file manager, and code editor.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenTheSite/aio-remote-ssh.git"
+  },
+  "author": "Luuk Faasse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OpenTheSite/aio-remote-ssh/issues"
+  },
+  "homepage": "https://github.com/OpenTheSite/aio-remote-ssh#readme",
+  "devDependencies": {
+    "electron": "^7.1.3"
+  }
+}
