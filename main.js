@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+const settings = require('electron-settings');
 
 let win
 
@@ -11,7 +12,12 @@ function createWindow () {
     }
   })
 
-  win.loadFile('index.html')
+  if(settings.has('ssh.host') && settings.has('ssh.username')) {
+    win.loadFile('index.html')
+  } else {
+    win.loadFile('setup.html')
+  }
+  
 
   win.on('closed', () => {
     win = null

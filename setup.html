@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>AIO Remote</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="node_modules/uikit/dist/css/uikit.min.css">
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+        }
+
+        .aio-content {
+            margin-left: 10%;
+            margin-right: 10%;
+            position: relative;
+            top: -80px;
+            width: 80%;
+        }
+    </style>
+</head>
+
+<body class="uk-background-muted">
+    <div class="uk-height-medium uk-light uk-background-primary uk-padding-large">
+        <h1 class="uk-heading-large uk-text-center">Welcome!</h1>
+    </div>
+
+    <div class="uk-card uk-card-default uk-card-body aio-content">
+        <h3 class="uk-card-title">Hi there! Welcome to AIO Remote.</h3>
+        <p>Let's get started by connecting to your server.</p>
+        <hr>
+
+        <div id="form-setup-alert"></div>
+
+        <form id="form-setup" uk-grid>
+
+            <div class="uk-width-1-2@s">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="input-host">Hostname</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="input-host" type="text" placeholder="Server FQDN or IP address">
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-1-2@s">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="input-host">Port</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="input-port" type="number" value="22"
+                            placeholder="Port for SSH server">
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-1-2@s">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="input-host">Username</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="input-username" type="text"
+                            placeholder="Server user for SSH connection">
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-width-1-2@s">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="input-password">Password</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="input-password" type="password"
+                            placeholder="Password to authenticate on server">
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <button class="uk-button uk-button-primary uk-width-1-1" type="button" onclick="connect()">Save &
+                    Connect</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="uk-alert-danger" id="form-setup-alert-tmpl" style="display:none" uk-alert>
+        <a class="uk-alert-close" uk-close></a>
+        <p></p>
+    </div>
+
+    <script src="node_modules/uikit/dist/js/uikit.min.js"></script>
+    <script src="node_modules/uikit/dist/js/uikit-icons.min.js"></script>
+
+    <script>
+        const settings = require('electron-settings');
+
+        function connect() {
+            var host = document.getElementById("input-host").value;
+            var port = document.getElementById("input-port").value;
+            var username = document.getElementById("input-username").value;
+            var password = document.getElementById("input-password").value;
+
+            if (host === "") {
+                error("Please enter the hostname");
+            } else if (port === "") {
+                error("Please enter the port");
+            } else if (username === "") {
+                error("Please enter the username");
+            } else if (password === "") {
+                error("Please enter the password");
+            } else {
+                settings.set('ssh', {
+                    host: host,
+                    port: port,
+                    username: username,
+                    password: password
+                });
+                window.location.replace("index.html");
+            }
+        }
+
+        function error(msg) {
+            var cln = document.getElementById("form-setup-alert-tmpl").cloneNode(true);
+            cln.removeAttribute("id");
+            cln.style.display = "block";
+            cln.lastChild.textContent = msg;
+            document.getElementById("form-setup-alert").appendChild(cln);
+        }
+    </script>
+</body>
+
+</html>

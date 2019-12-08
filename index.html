@@ -3,12 +3,80 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>AIO Remote</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="node_modules/uikit/dist/css/uikit.min.css">
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+        }
+
+        .aio-content {
+            margin-left: 10%;
+            margin-right: 10%;
+            position: relative;
+            top: -80px;
+            width: 80%;
+        }
+    </style>
 </head>
 
-<body>
-    
+<body class="uk-background-muted">
+    <div class="uk-height-medium uk-light uk-background-primary uk-padding-large">
+        <h1 class="uk-heading-large uk-text-center">Welcome!</h1>
+    </div>
+
+    <div class="uk-card uk-card-default uk-card-body aio-content">
+
+        <div class="ssh-terminal"></div>
+
+    </div>
+
+    <script src="node_modules/uikit/dist/js/uikit.min.js"></script>
+    <script src="node_modules/uikit/dist/js/uikit-icons.min.js"></script>
+
+    <script>
+        const settings = require('electron-settings');
+
+        var Client = require('ssh2').Client;
+
+        var conn = new Client();
+        conn.on('ready', function () {
+            console.log('Client :: ready');
+            conn.shell(function (err, stream) {
+                if (err) throw err;
+                stream.on('close', function () {
+                    console.log('Stream :: close');
+                    conn.end();
+                }).on('data', function (data) {
+                    console.log('OUTPUT: ' + data);
+                });
+            });
+        }).connect({
+            host: settings.get("ssh.host"),
+            port: settings.get("ssh.port"),
+            username: settings.get("ssh.username"),
+            password: settings.get("ssh.password")
+        });
+
+        function executeCommand(cmd) {
+            Client.exec(cmd+'\n');
+        }
+
+        function logoutServer(cmd) {
+            stream.end('exit\n');
+        }
+
+        function forgetServer() {
+            settings.deleteAll();
+            window.location.replace("setup.html");
+        }
+    </script>
 </body>
 
 </html>
